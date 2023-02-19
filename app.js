@@ -13,16 +13,27 @@ const toggle = () => {
 const handleOnClick = index => {
   toggle();
   
+  const opacity = toggled ? 0 : 1;
+  
   anime({
     targets: ".tile",
-    opacity: toggled ? 0 : 1,
+    opacity: opacity,
     delay: anime.stagger(50, {
       grid: [columns, rows],
       from: index
     })
   });
 
-  
+  // On mobile, we need to toggle the opacity of each tile manually,
+  // since the stagger animation doesn't work properly.
+  if (document.body.clientWidth <= 800) {
+    const tiles = document.querySelectorAll(".tile");
+    tiles.forEach((tile, i) => {
+      if (i !== index) {
+        tile.style.opacity = opacity;
+      }
+    });
+  }
 }
 
 const createTile = index => {
